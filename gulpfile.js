@@ -22,13 +22,13 @@ let path = {
 		fonts: 'app/fonts/**/*',
 		localization: "app/localization/*.json"
 	},
-	build: {
-		html: 'build',
-		style: 'build/css',
-		scripts: 'build/js',
-		img: 'build/img',
-		fonts: 'build/fonts',
-		localization: "build/localization"
+	dist: {
+		html: 'dist',
+		style: 'dist/css',
+		scripts: 'dist/js',
+		img: 'dist/img',
+		fonts: 'dist/fonts',
+		localization: "dist/localization"
 	},
 	watch: {
 		htmlApp: 'app/*.html',
@@ -44,7 +44,7 @@ let path = {
 gulp.task('browser-sync', function(){
 	browserSync({
 		server: {
-			baseDir: 'build'
+			baseDir: 'dist'
 		},
 		notify: false,
 		tunnel: false,
@@ -56,7 +56,7 @@ gulp.task('browser-sync', function(){
 gulp.task('html', function() {
 	return gulp.src(path.src.html)
 		.pipe(include())
-		.pipe(gulp.dest(path.build.html))
+		.pipe(gulp.dest(path.dist.html))
 		.pipe(browserSync.reload({stream: true}));
 });
 
@@ -76,7 +76,7 @@ gulp.task('style', function(done){
     		// forceMediaMerge: true
     	}))
     	.pipe(sourcemaps.write())
-    	.pipe(gulp.dest(path.build.style))
+    	.pipe(gulp.dest(path.dist.style))
     	.on('end', function() {
         	done();
       	})
@@ -88,13 +88,13 @@ gulp.task('scripts', function() {
 		.pipe(sourcemaps.init())
 		.pipe(include())
 		.pipe(sourcemaps.write())
-		.pipe(gulp.dest(path.build.scripts))
+		.pipe(gulp.dest(path.dist.scripts))
 		.pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('img', function() {
 	return gulp.src(path.src.img)
-	  	.pipe(gulp.dest(path.build.img))
+	  	.pipe(gulp.dest(path.dist.img))
 	  	.pipe(browserSync.reload({stream: true}));
 });
 
@@ -105,20 +105,20 @@ gulp.task('svg', function() {
                 removeViewBox: false
             }]
         }))
-	  	.pipe(gulp.dest(path.build.img))
+	  	.pipe(gulp.dest(path.dist.img))
 	  	.pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('fonts', function() {
 	return gulp.src(path.src.fonts)
-	  	.pipe(gulp.dest(path.build.fonts))
+	  	.pipe(gulp.dest(path.dist.fonts))
 	  	.pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('localization', function() {
 	return gulp.src(path.src.localization)
 		.pipe(include())
-		.pipe(gulp.dest(path.build.localization))
+		.pipe(gulp.dest(path.dist.localization))
 });
 
 gulp.task('deploy:style', function(){
@@ -132,18 +132,18 @@ gulp.task('deploy:style', function(){
 		.pipe(csso({
     		// forceMediaMerge: true
     	}))
-		.pipe(gulp.dest(path.build.style))
+		.pipe(gulp.dest(path.dist.style))
 });
 
 gulp.task('deploy:scripts', function() {
 	return gulp.src(path.src.scripts)
 		.pipe(include())
-		.pipe(gulp.dest(path.build.scripts))
+		.pipe(gulp.dest(path.dist.scripts))
 		.pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('clean', function() {
-	return del.sync('build/*')
+	return del.sync('dist/*')
 });
 
 const name = process.argv[process.argv.length - 1].split('--')[1];
